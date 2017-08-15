@@ -8,6 +8,9 @@ import com.alibaba.sdk.android.push.notification.CPushMessage;
 
 import java.util.Map;
 
+import cn.net.darking.safeapp.mail.MailSender;
+import cn.net.darking.safeapp.mail.MailSenderInfo;
+
 /**
  * Created by Zrzc on 2017/8/15.
  */
@@ -25,6 +28,8 @@ public class MyMessageReceiver extends MessageReceiver {
     @Override
     public void onMessage(Context context, CPushMessage cPushMessage) {
         Log.e("MyMessageReceiver", "onMessage, messageId: " + cPushMessage.getMessageId() + ", title: " + cPushMessage.getTitle() + ", content:" + cPushMessage.getContent());
+        send();
+
     }
 
     @Override
@@ -46,4 +51,35 @@ public class MyMessageReceiver extends MessageReceiver {
     protected void onNotificationRemoved(Context context, String messageId) {
         Log.e("MyMessageReceiver", "onNotificationRemoved");
     }
+
+    private void send() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    MailSenderInfo mailInfo = new MailSenderInfo();
+                    mailInfo.setMailServerHost("smtp.163.com");
+                    mailInfo.setMailServerPort("25");
+                    mailInfo.setValidate(true);
+                    mailInfo.setUserName("fsdz10086@163.com"); // 你的邮箱地址
+//					mailInfo.setPassword("guolugui521");// 您的邮箱密码
+                    mailInfo.setPassword("fsdz10086");// 这里用的是客户端授权码
+                    mailInfo.setFromAddress("fsdz10086@163.com"); // 发送的邮箱
+                    mailInfo.setToAddress("jsdz10086@163.com"); // 发到哪个邮件去
+                    mailInfo.setSubject("测试发送"); // 邮件主题
+                    mailInfo.setContent("地址为:朗廷大厦"); // 邮件文本
+                    // 这个类主要来发送邮件
+                    MailSender sms = new MailSender();
+                    sms.sendTextMail(mailInfo);// 发送文体格式
+                    //sms.sendHtmlMail(mailInfo);//发送html格式
+
+                } catch (Exception e) {
+                    Log.e("==SendMail", e.getMessage(), e);
+                }
+            }
+        }).start();
+
+    }
+
 }

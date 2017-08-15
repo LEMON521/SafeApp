@@ -3,6 +3,9 @@ apply plugin: 'com.jakewharton.butterknife'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
+//    dexOptions {
+//        javaMaxHeapSize "4g"
+//    }
     defaultConfig {
         applicationId "cn.net.darking.safeapp"
         minSdkVersion 15
@@ -10,16 +13,11 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
 
-    defaultConfig {
-        applicationId "cn.net.darking.safeapp" //JPush上注册的包名.
+
+        applicationId "cn.net.darking.safeapp" //阿里推送上注册的包名.
+
+        multiDexEnabled true
 
         ndk {
             //选择要添加的对应cpu类型的.so库。
@@ -27,11 +25,25 @@ android {
 //            abiFilters 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
             // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
         }
+
     }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+//    defaultConfig {
+//
+//    }
 }
 
 dependencies {
-
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -43,17 +55,21 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     //  发送邮件需要用到的jar包
-        compile files('libs/activation.jar')
-        compile files('libs/additionnal.jar')
-        compile files('libs/mail.jar')
-
+    compile files('libs/activation.jar')
+    compile files('libs/additionnal.jar')
+    compile files('libs/mail.jar')
     //  阿里推送相关
-//    compile 'com.aliyun.ams:alicloud-android-push:3.0.11@aar'
-//    compile 'com.aliyun.ams:alicloud-android-utdid:1.1.5.3'
-//    compile 'com.aliyun.ams:alicloud-android-ut:5.1.0'
-    compile files('libs/alicloud-android-monitor-2.5.1.1_for_bc_proguard.jar')
+    //    compile 'com.aliyun.ams:alicloud-android-push:3.0.11@aar'
+    //    compile 'com.aliyun.ams:alicloud-android-utdid:1.1.5.3'
+    //    compile 'com.aliyun.ams:alicloud-android-ut:5.1.0'
+    //    compile files('libs/alicloud-android-monitor-2.5.1.1_for_bc_proguard.jar')
     compile files('libs/alicloud-android-push-sdk-3.0.11.jar')
     compile files('libs/alicloud-android-ut-5.1.0.jar')
-//    compile files('libs/alicloud-android-utils-1.0.3.jar')
-//    compile files('libs/utdid4all-1.1.5.3_proguard.jar')
+    compile files('libs/utdid4all-1.1.5.3_proguard.jar')
+    //    compile files('libs/alicloud-android-utils-1.0.3.jar')
+
+
+    //    高德定位
+    compile files('libs/AMap_Location_V3.5.0_20170731.jar')
+
 }
