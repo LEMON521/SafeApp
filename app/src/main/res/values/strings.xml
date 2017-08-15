@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SafeApp</string>
+    <string name="mine">我的</string>
+    <string name="safe">卫士</string>
+    <string name="util">工具箱</string>
+    <string name="service">安心服务</string>
+</resources>
