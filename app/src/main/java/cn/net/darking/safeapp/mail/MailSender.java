@@ -58,6 +58,7 @@ public class MailSender {
             mailMessage.setFrom(from);
             // 创建邮件的接收者地址，并设置到邮件消息中
             Address to = new InternetAddress(mailInfo.getToAddress());
+            mailMessage.setRecipient(Message.RecipientType.CC, from);//抄送自己一份
             mailMessage.setRecipient(Message.RecipientType.TO, to);
             // 设置邮件消息的主题
             mailMessage.setSubject(mailInfo.getSubject());
@@ -68,6 +69,7 @@ public class MailSender {
             mailMessage.setText(mailContent);
             // 发送邮件
             Transport.send(mailMessage);
+
             return true;
         } catch (MessagingException ex) {
             ex.printStackTrace();

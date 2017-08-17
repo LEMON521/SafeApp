@@ -2,6 +2,7 @@ package cn.net.darking.safeapp.app;
 
 import android.app.Application;
 import android.content.Context;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.alibaba.sdk.android.push.CloudPushService;
@@ -22,7 +23,8 @@ public class MyApplication extends Application implements Serializable {
 //    private HashMap<String, Integer> mPushNum;
 
     public int mOsVersion = 0;
-    public int mCount = 0;
+
+    TelephonyManager tm;
 
     @Override
     public void onCreate() {
@@ -31,7 +33,26 @@ public class MyApplication extends Application implements Serializable {
         initCloudChannel(this);
         context = getApplicationContext();
         mOsVersion = getAndroidOSVersion();
-        mCount++;
+
+        //获取手机号码
+        tm = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+        String deviceid = tm.getDeviceId();//获取智能设备唯一编号
+        String tel = tm.getLine1Number();//获取本机号码
+        String imei = tm.getSimSerialNumber();//获得SIM卡的序号
+        String imsi = tm.getSubscriberId();//得到用户Id
+
+        CloudPushService pushService = PushServiceFactory.getCloudPushService();
+        pushService.bindAccount(tel, new CommonCallback() {
+            @Override
+            public void onSuccess(String s) {
+                Log.e("绑定账号", "==============初始化绑定成功!!!===============" + s);
+            }
+
+            @Override
+            public void onFailed(String s, String s1) {
+                Log.e("绑定账号", "==============初始化绑定失败!!!===============" + s + "---原因---" + s1);
+            }
+        });
     }
 
     /**

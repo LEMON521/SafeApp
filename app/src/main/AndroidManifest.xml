@@ -12,7 +12,6 @@
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
 
 
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,13 +21,19 @@
         </activity>
 
 
+        <receiver android:name=".receiver.BootReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
+
         <!--高德定位-->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="2af90538f773a4de8aeda9207833fa5b"/>
+            android:value="2af90538f773a4de8aeda9207833fa5b" />
         <service android:name="com.amap.api.location.APSService"></service>
-
-
 
 
         <!--**********************************************************-->
@@ -185,6 +190,8 @@
     <!--访问网络-->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!--开机自启动-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <!-- 阿里云推送相关权限 -->
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
